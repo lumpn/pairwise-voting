@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PairwiseVoting": {
+      "commandName": "Project",
+      "commandLineArgs": "16"
+    }
+  }
+}

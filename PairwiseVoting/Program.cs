@@ -1,4 +1,7 @@
-﻿namespace PairwiseVoting
+﻿using System;
+using System.Collections.Generic;
+
+namespace PairwiseVoting
 {
     internal class Program
     {
@@ -11,17 +14,28 @@
                 this.nodeA = nodeA;
                 this.nodeB = nodeB;
             }
+
+            public override string ToString()
+            {
+                return string.Format("({0}, {1})", nodeA, nodeB);
+            }
         }
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            if (args.Length < 1)
+            {
+                Console.WriteLine("Generates unique pairs for a graph of N nodes using coprimes.");
+                Console.WriteLine("Usage: PairwiseVoting <numNodes>");
+                return;
+            }
 
-            int numNodes = 17;
-            int[] coprimes = { 1, 2, 3, 4, 5, 6, 7, 8 };
+            var numNodes = int.Parse(args[0]);
+            var coprimes = FindCoprimes(numNodes);
+            var numPairs = numNodes * coprimes.Length;
 
-            Console.WriteLine("Generating unique pairs for a graph of {0} nodes using these coprimes: {1}",
-                numNodes, string.Join(", ", coprimes));
+            Console.WriteLine("Generating {0} unique pairs for a graph of {1} nodes using these coprimes: {2}",
+                numPairs, numNodes, string.Join(", ", coprimes));
 
             foreach (int coprime in coprimes)
             {
@@ -34,9 +48,38 @@
                     var edge = new Edge(previousIndex, index);
                     previousIndex = index;
 
-                    Console.WriteLine("  {0} -- {1}", edge.nodeA, edge.nodeB);
+                    Console.WriteLine("  {0}", edge);
                 }
             }
+        }
+
+        private static int[] FindCoprimes(int N)
+        {
+            var coprimes = new List<int>();
+            for (int i = 1; i <= (N / 2); i++)
+            {
+                if (AreCoprime(N, i))
+                {
+                    coprimes.Add(i);
+                }
+            }
+            return coprimes.ToArray();
+        }
+
+        private static bool AreCoprime(int larger, int smaller)
+        {
+            var gdc = GreatestCommonDivisor(larger, smaller);
+            return (gdc == 1);
+        }
+
+        private static int GreatestCommonDivisor(int largerNumber, int smallerNumber)
+        {
+            if (smallerNumber == 0)
+            {
+                return largerNumber;
+            }
+
+            return GreatestCommonDivisor(smallerNumber, largerNumber % smallerNumber);
         }
     }
 }
