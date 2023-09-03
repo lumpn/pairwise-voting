@@ -42,9 +42,9 @@ namespace PairwiseVoting
                 Console.WriteLine("Cycle using coprime {0}:", coprime);
 
                 int previousIndex = 0;
-                for (int i = 1; i < numNodes + 1; i++)
+                for (int i = 1; i <= numNodes; i++)
                 {
-                    var index = (i * coprime) % numNodes;
+                    var index = (previousIndex + coprime) % numNodes;
                     var edge = new Edge(previousIndex, index);
                     previousIndex = index;
 
